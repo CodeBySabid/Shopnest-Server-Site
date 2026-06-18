@@ -4,7 +4,7 @@ import {
   getSingleProduct,
   createProduct,
   updateProduct,
-  // deleteProduct,
+  deleteProduct,
   // getSellerProducts,
   // approveProduct,
 } from "../controllers/productController";
@@ -18,7 +18,7 @@ router.get("/:id", getSingleProduct);
 // Seller routes
 router.post("/", createProduct);
 router.put("/:id", updateProduct);
-// router.delete("/:id", deleteProduct);
+router.delete("/:id", deleteProduct);
 // router.get("/seller/:sellerId", getSellerProducts);
 
 // Admin routes

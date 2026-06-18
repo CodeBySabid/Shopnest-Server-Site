@@ -96,3 +96,18 @@ export const deleteProduct = async (req: Request, res: Response) => {
   };
 };
 
+// All of the seller own products
+export const getSellerProducts = async (req: Request, res: Response) => {
+  try {
+    const sellerId = req.params.sellerId;
+    if (!sellerId) {
+      res.status(404).json({ success: false, message: "Seller ID is required" })
+      return;
+    }
+    const products = await Product.find({ sellerId })
+    res.status(200).json({ success: true, data: products })
+  }
+  catch (error) {
+    res.status(500).json({ success: false, message: "Server error", error });
+  };
+};
