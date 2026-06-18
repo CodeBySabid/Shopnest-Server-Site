@@ -35,3 +35,20 @@ export const getAllProducts = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: "Server error", error })
   }
 }
+
+// Will Get One Product
+export const getSingleProduct = async(req: Request, res: Response ) => {
+  try{
+    const product = await Product.findById(req.params.id);
+    if(!product) {
+      res.status(404).json({success: false, message: "Product not found"});
+      return;
+    }
+    res.status(200).json({success: true, data:product});
+  }
+  catch(error) {
+    res.status(500).json({success: false, message: "Server error", error});
+  }
+};
+
+
