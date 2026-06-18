@@ -2,7 +2,7 @@ import express from "express";
 import {
   getAllProducts,
   getSingleProduct,
-  // createProduct,
+  createProduct,
   // updateProduct,
   // deleteProduct,
   // getSellerProducts,
@@ -16,8 +16,8 @@ router.get("/", getAllProducts);
 router.get("/:id", getSingleProduct);
 
 // Seller routes
-// router.post("/", createProduct);
-// router.put("/:id", updateProduct);
+router.post("/", createProduct);
+router.put("/:id", updateProduct);
 // router.delete("/:id", deleteProduct);
 // router.get("/seller/:sellerId", getSellerProducts);
 
