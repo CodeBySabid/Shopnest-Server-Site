@@ -39,3 +39,20 @@ export const getUserRole = async (req: Request, res: Response) => {
         res.status(500).json({ success: false, message: "Server error" });
     };
 };
+
+// Request to become a seller
+export const becomeSellerRequest = async (req: Request, res: Response) => {
+    try {
+        const { email, shopName, shopDescription } = req.body;
+        const user = await User.findOneAndUpdate(
+            { email },
+            { shopName, shopDescription, role: "seller", isApproved: false },
+            { new: true }
+        )
+        res.status(200).json({ success: true, data: user });
+    }
+    catch (error) {
+        res.status(500).json({ success: false, message: "Server error", error })
+    }
+}
+
