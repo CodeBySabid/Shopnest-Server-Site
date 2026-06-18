@@ -1,5 +1,4 @@
 export interface IProduct {
-  _id?: string;
   name: string;
   price: number;
   originalPrice: number;
@@ -17,7 +16,6 @@ export interface IProduct {
 }
 
 export interface IUser {
-  _id?: string;
   name: string;
   email: string;
   image?: string;
@@ -29,7 +27,6 @@ export interface IUser {
 }
 
 export interface IOrder {
-  _id?: string;
   userId: string;
   items: {
     productId: string;
@@ -46,7 +43,6 @@ export interface IOrder {
 }
 
 export interface IReview {
-  _id?: string;
   productId: string;
   userId: string;
   userName: string;
