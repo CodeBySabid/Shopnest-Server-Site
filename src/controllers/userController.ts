@@ -81,3 +81,18 @@ export const approveSeller = async (req: Request, res: Response) => {
         res.status(500).json({ success: false, message: "Server error", error })
     }
 }
+
+// Admin role will change
+export const updateUserRole = async (req: Request, res: Response) => {
+    try {
+        const user = await User.findByIdAndUpdate(
+            req.params.id,
+            { role: req.body.role },
+            { new: true }
+        );
+        res.status(200).json({ success: true, data: user });
+    }
+    catch (error) {
+        res.status(500).json({ success: false, message: "Server error", error });
+    }
+}

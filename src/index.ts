@@ -3,8 +3,9 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import dotenv from "dotenv";
+import productRoutes from './routes/productRoutes';
+import userRoutes from "./routes/userRoutes";
 import connectDB from "./config/db";
-import router from "./routes/productRoutes";
 
 dotenv.config();
 
@@ -18,11 +19,12 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 // Routes
-app.use("/api/products", router);
+app.use("/api/products", productRoutes);
+app.use("/api/users", userRoutes);
 
 // Health check
 app.get("/", (req: Request, res: Response) => {
-  res.json({ message: "✅ ShopNest API is running!" });
+  res.json({message: "✅ ShopNest API is running!"})
 });
 
 // Connect DB & Start Server
@@ -31,5 +33,3 @@ connectDB().then(() => {
     console.log(`🚀 Server running on port ${PORT}`);
   });
 });
-
-export default app;
