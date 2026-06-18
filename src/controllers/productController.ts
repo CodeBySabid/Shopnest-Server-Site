@@ -1,5 +1,6 @@
 import Product from "../models/Product";
 import { Request, Response } from "express";
+
 // All Products Here
 export const getAllProducts = async (req: Request, res: Response) => {
   try {
@@ -34,4 +35,3 @@ export const getAllProducts = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: "Server error", error })
   }
 }
-
