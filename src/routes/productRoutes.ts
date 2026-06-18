@@ -3,7 +3,7 @@ import {
   getAllProducts,
   getSingleProduct,
   createProduct,
-  // updateProduct,
+  updateProduct,
   // deleteProduct,
   // getSellerProducts,
   // approveProduct,
