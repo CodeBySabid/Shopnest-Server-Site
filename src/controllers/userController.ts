@@ -56,3 +56,28 @@ export const becomeSellerRequest = async (req: Request, res: Response) => {
     }
 }
 
+// Admin can see all user
+export const getAllUsers = async (req: Request, res: Response) => {
+    try {
+        const users = await User.find().sort({ createdAt: -1 });
+        res.status(200).json({ success: true, data: users });
+    }
+    catch (error) {
+        res.status(500).json({ success: false, message: "Server error", error })
+    }
+}
+
+// Admin will approve the seller
+export const approveSeller = async (req: Request, res: Response) => {
+    try {
+        const user = await User.findByIdAndUpdate(
+            req.params.id,
+            { isApproved: true },
+            { new: true }
+        );
+        res.status(200).json({ success: true, data: user });
+    }
+    catch (error) {
+        res.status(500).json({ success: false, message: "Server error", error })
+    }
+}
