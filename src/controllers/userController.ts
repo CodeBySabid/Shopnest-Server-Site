@@ -21,3 +21,21 @@ export const saveUser = async (req: Request, res: Response) => {
     };
 };
 
+// Find the user role
+export const getUserRole = async (req: Request, res: Response) => {
+    try {
+        const email = req.params.email;
+        if (!email) {
+            return res.status(400).json({ success: false, message: "Email is required" });
+        }
+        const user = await User.findOne({ email });
+        if (!user) {
+            res.status(404).json({ success: false, message: "User not found" });
+            return;
+        }
+        res.status(200).json({ success: true, role: user.role });
+    }
+    catch (error) {
+        res.status(500).json({ success: false, message: "Server error" });
+    };
+};
