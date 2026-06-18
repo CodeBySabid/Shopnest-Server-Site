@@ -81,3 +81,18 @@ export const updateProduct = async (req: Request, res: Response) => {
   };
 };
 
+// Seller Can Be delete On His Product
+export const deleteProduct = async (req: Request, res: Response) => {
+  try {
+    const product = await Product.findByIdAndDelete(req.params.id);
+    if (!product) {
+      res.status(404).json({ success: false, message: "Product not found" });
+      return;
+    }
+    res.status(200).json({ success: true, message: "Product deleted" });
+  }
+  catch (error) {
+    res.status(500).json({ success: false, message: "Server error", error })
+  };
+};
+
