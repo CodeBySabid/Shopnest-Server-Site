@@ -1,27 +1,19 @@
 import express from "express";
-import {
-  getAllProducts,
-  getSingleProduct,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-  getSellerProducts,
-  approveProduct,
-} from "../controllers/productController";
+import { approveProduct, createProduct, deleteProduct, getAllProducts, getSellerProducts, getSingleProduct, updateProduct } from "../controllers/productController";
 
 const router = express.Router();
 
-// Public routes
+// Public Routes
 router.get("/", getAllProducts);
 router.get("/:id", getSingleProduct);
 
-// Seller routes
+// Seller Router
 router.post("/", createProduct);
 router.put("/:id", updateProduct);
 router.delete("/:id", deleteProduct);
 router.get("/seller/:sellerId", getSellerProducts);
 
-// Admin routes
+// Admin Route
 router.patch("/:id/approve", approveProduct);
 
 export default router;
