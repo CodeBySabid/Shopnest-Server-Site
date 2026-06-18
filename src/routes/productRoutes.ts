@@ -5,8 +5,8 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
-  // getSellerProducts,
-  // approveProduct,
+  getSellerProducts,
+  approveProduct,
 } from "../controllers/productController";
 
 const router = express.Router();
@@ -19,9 +19,9 @@ router.get("/:id", getSingleProduct);
 router.post("/", createProduct);
 router.put("/:id", updateProduct);
 router.delete("/:id", deleteProduct);
-// router.get("/seller/:sellerId", getSellerProducts);
+router.get("/seller/:sellerId", getSellerProducts);
 
 // Admin routes
-// router.patch("/:id/approve", approveProduct);
+router.patch("/:id/approve", approveProduct);
 
 export default router;
