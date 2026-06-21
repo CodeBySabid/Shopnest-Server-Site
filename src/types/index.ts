@@ -18,11 +18,15 @@ export interface IProduct {
 export interface IUser {
   name: string;
   email: string;
+  password?: string;
   image?: string;
+  phone?: string;
+  address?: string;
   role: "user" | "seller" | "admin";
   shopName?: string;
   shopDescription?: string;
   isApproved?: boolean;
+  provider?: string;
   createdAt?: Date;
 }
 

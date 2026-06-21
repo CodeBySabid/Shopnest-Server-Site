@@ -15,6 +15,9 @@ const UserSchema = new Schema<IUserDocument>(
       required: true, 
       unique: true 
     },
+    password: {
+      type: String,
+    },
     image: { 
       type: String 
     },
@@ -34,6 +37,10 @@ const UserSchema = new Schema<IUserDocument>(
       type: Boolean, 
       default: false
     },
+    provider: {
+      type: String,
+      default: "credentials",
+    }
   },
   { timestamps: true }
 );
