@@ -24,22 +24,22 @@ export const saveUser = async (req: Request, res: Response) => {
 
 // Registration(Email And Password)
 export const registerUser = async (req: Request, res: Response) => {
-    try{
-        const{name, email, password, phone, address, image} = req.body;
+    try {
+        const { name, email, password, phone, address, image } = req.body;
 
         // Check if the user is already registered
-        const existingUser = await User.findOne({email});
-        if(existingUser) {
-           res.status(400).json({success: false, message: "Email already"})         
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            res.status(400).json({ success: false, message: "Email already" })
         }
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
-        
+
         const user = await User.create({
             name,
             email,
             password: hashedPassword,
-            phone, 
+            phone,
             address,
             image,
             role: "user",
@@ -56,13 +56,58 @@ export const registerUser = async (req: Request, res: Response) => {
             role: user.role,
         };
 
-        res.status(201).json({success: true, data: userResponse});
+        res.status(201).json({ success: true, data: userResponse });
     }
-    catch(error){
-        res.status(500).json({success: false, message: "Server error", error});
+    catch (error) {
+        res.status(500).json({ success: false, message: "Server error", error });
     }
 }
 
+// Login verify (Email And password)
+export const loginUser = async (req: Request, res: Response) => {
+    try {
+        const { email, password } = req.body;
+
+        // find user
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        // Can't log in with Google user password
+        if (user.provider === "google") {
+            res.status(400).json({
+                success: false,
+                message: "Please login with Google"
+            })
+            return;
+        }
+
+        // Password verify
+        const isPasswordValid = await bcrypt.compare(
+            password,
+            user.password as string
+        );
+
+        if (!isPasswordValid) {
+            return res.status(401).json({ success: false, message: "Wrong password" });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                image: user.image,
+            },
+        })
+    }
+    catch (error) {
+        res.status(500).json({ success: false, message: "Server error", error });
+    }
+}
 
 // Find the user role
 export const getUserRole = async (req: Request, res: Response) => {
@@ -102,7 +147,7 @@ export const becomeSellerRequest = async (req: Request, res: Response) => {
 // Admin can see all user
 export const getAllUsers = async (req: Request, res: Response) => {
     try {
-        const users = await User.find().sort({ createdAt: -1 });
+        const users = await User.find().select("-password").sort({ createdAt: -1 });
         res.status(200).json({ success: true, data: users });
     }
     catch (error) {
