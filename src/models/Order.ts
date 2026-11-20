@@ -23,10 +23,26 @@ const OrderSchema = new Schema<IOrderDocument>(
       type: Number, 
       required: true 
     },
+    shippingAddress: {
+      type: String, 
+      required: true
+    },
+    phone: {
+      type: String,
+      required: true,
+    },
+    paymentStatus: {
+      type: String,
+      enum: ["unpaid", "paid"],
+      default: "unpaid",
+    },
     status: {
       type: String,
       enum: ["pending", "processing", "shipped", "delivered"],
       default: "pending",
+    },
+    stripeSessionId: {
+      type: String,
     },
     stripePaymentId: { 
       type: String 

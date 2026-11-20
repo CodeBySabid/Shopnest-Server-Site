@@ -42,6 +42,10 @@ export interface IOrder {
   }[];
   totalPrice: number;
   status: "pending" | "processing" | "shipped" | "delivered";
+  shippingAddress: string;
+  phone: string;
+  paymentStatus: "unpaid" | "paid";
+  stripeSessionId: string;
   stripePaymentId?: string;
   createdAt?: Date;
 }
