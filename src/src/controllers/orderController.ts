@@ -92,3 +92,43 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
         res.status(500).json({ success: false, message: "Could not start checkout" });
     }
 };
+
+export const confirmOrder = async (req: Request, res: Response) => {
+    try{
+        const sessionId = req.query.session_id as string;
+        if(!sessionId) {
+            res.status(400).json({success: false, message: "session_id missing"});
+            return;
+        }
+
+        const session = await getStripe().checkout.sessions.retrieve(sessionId);
+        if(session.payment_status !== "paid") {
+            res.status(400).json({success: false, message: "Payment not complete"});
+            return;
+        }
+        
+        const order = await Order.findById(session.metadata?.orderId);
+        if(!order) {
+            res.status(404).json({success: false, message: "Order not found"});
+            return;
+        }
+
+        if(order.paymentStatus !== "paid") {
+            order.paymentStatus = "paid";
+            order.status = "processing";
+            order.stripePaymentId = session.payment_intent as string;
+            await order.save();
+
+            for (const item of order.items) {
+                await Product.findByIdAndUpdate(item.productId, {
+                    $inc: {stock: -item.quantity},
+                });
+            }
+        }
+
+        res.status(200).json({success: true, data: order});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({success: false, message: "Server error"});
+    }
+};
