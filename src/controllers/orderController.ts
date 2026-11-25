@@ -1,7 +1,7 @@
 import Stripe from "stripe";
-import User from "../../models/User";
-import Product from "../../models/Product";
-import Order from "../../models/Order";
+import User from "../models/User";
+import Product from "../models/Product";
+import Order from "../models/Order";
 import { Request, Response } from "express";
 
 const getStripe = () => new Stripe(process.env.STRIPE_SECRET_KEY as string);
@@ -44,7 +44,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
             }
 
             orderItems.push({
-                product: String(product._id),
+                productId: String(product._id),
                 sellerId: product.sellerId,
                 name: product.name,
                 price: product.price,
@@ -69,10 +69,21 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
             quantity: i.quantity,
             price_date: {
                 currency: "usd",
-                unit_amount: shipping * 100,
-                product_data: { name: "shipping", images: [] },
+                unit_amount: Math.round(i.price * 100),
+                product_data: { name: i.name, images: [i.image] },
             },
         }));
+
+        if(shipping > 0) {
+            lineItems.push({
+                quantity: 1, 
+                price_date: {
+                    currency: "usd",
+                    unit_amount: shipping * 100,
+                    product_data: {name: "Shipping", images: []},
+                },
+            })
+        }
 
         const session = await getStripe().checkout.sessions.create({
             mode: "payment",
